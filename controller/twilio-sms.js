@@ -13,6 +13,7 @@ const sendOTP = async (req,res,next) => {
     
     const {countryCode,phoneNumber} = req.body;
     console.log(phoneNumber);
+    
     try {
 
         const otpres = await client.verify

@@ -17,10 +17,12 @@ app.use(cors());
 // app.use((req,res,next)=>{
 //     res.setHeader('Access-Control-Allow-Origin', '*');
 // })
-
-app.get('/',()=>{
-    console.log("Twilio-sms-service activated");
-})
+app.get('/',(req,res)=>{
+    res.send("Twilio-sms-service activated");
+});
+// app.get('/',()=>{
+//     console.log("Twilio-sms-service activated");
+// })
 app.post('/', (req, res) => {
     // Handle the POST request
     console.log(req.body);

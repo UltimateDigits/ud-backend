@@ -7,5 +7,5 @@ router.use(cors());
 
 router.route('/send-otp').post(sendOTP);
 router.route('/verify-otp').post(verifyOTP);
-router.route('/verify-otp').get(()=>{console.log("posting here. . .")});
+// router.route('/verify-otp').get(()=>{console.log("posting here. . .")});
 module.exports = router
