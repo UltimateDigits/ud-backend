@@ -22,11 +22,11 @@ const sendOTP = async (req,res,next) => {
             to:`+${countryCode}${phoneNumber}`,
             channel: "sms"
         });
-        res.status(200).send(`OTP send successfully!: ${JSON.stringify(otpres)}`)
+        return res.status(200).send(`OTP send successfully!: ${JSON.stringify(otpres)}`)
     }catch (e) {
         console.log(e);
         console.log("Leave a line\n")
-        res.status(error?.status|| 400).send(error?message : 'Something went wrong!!');
+        return res.status(error?.status|| 400).send(error?message : 'Something went wrong!!');
 
     }
 };
@@ -48,7 +48,9 @@ const verifyOTP = async (req,res,next) => {
             to:`+${countryCode}${phoneNumber}`,
             code: otp,
         });
-       return res.status(200).send(`OTP send successfully!: ${JSON.stringify(verifyres)}`)
+        if(verifyres.status === 'approved' )
+       return res.status(200).send(`OTP verified successfully!: ${JSON.stringify(verifyres)}`);
+       return res.status(200).send(`OTP unsuccessfull`);
     }catch (e) {
         console.log(e);
         console.log("Leave a line\n")
