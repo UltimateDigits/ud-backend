@@ -76,7 +76,8 @@ const sendMsg = async (req,res,next) => {
         const sent = await client.messages
         .create({
             body:`${phoneNumber} sent ${amount} into your account`,
-            to: `${phoneNumber}`
+            to: `${phoneNumber}`,
+            from:"+15416157939"
         })
         
        return res.status(200).send(JSON.stringify(sent));
