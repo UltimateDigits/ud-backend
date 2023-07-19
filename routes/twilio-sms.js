@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.use(cors());
 
-router.route('/send-otp').post(sendOTP);
+router.route('/sendotp').post(sendOTP);
 router.route('/verify-otp').post(verifyOTP);
 // router.route('/verify-otp').get(()=>{console.log("posting here. . .")});
 module.exports = router
