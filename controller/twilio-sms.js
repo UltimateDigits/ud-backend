@@ -13,7 +13,6 @@ const sendOTP = async (req,res,next) => {
     
     const {countryCode,phoneNumber} = req.body;
     console.log(phoneNumber);
-    
     try {
 
         const otpres = await client.verify
@@ -22,11 +21,15 @@ const sendOTP = async (req,res,next) => {
             to:`+${countryCode}${phoneNumber}`,
             channel: "sms"
         });
-        return res.status(200).send(`OTP send successfully!: ${JSON.stringify(otpres)}`)
+        console.log(typeof(otpres))
+        // console.log(typeof(otpres))
+        console.log(otpres)
+        return res.status(200).send(JSON.stringify(otpres))
+       
     }catch (e) {
         console.log(e);
         console.log("Leave a line\n")
-        return res.status(error?.status|| 400).send(error?message : 'Something went wrong!!');
+        return res.status(e?.status|| 400).send(e? JSON.stringify({"error":e}) : JSON.stringify({"error": 'Something went wrong!!'}));
 
     }
 };
@@ -48,13 +51,13 @@ const verifyOTP = async (req,res,next) => {
             to:`+${countryCode}${phoneNumber}`,
             code: otp,
         });
-        if(verifyres.status === 'approved' )
-       return res.status(200).send(`OTP verified successfully!: ${JSON.stringify(verifyres)}`);
-       return res.status(200).send(`OTP unsuccessfull`);
+        
+       return res.status(200).send(JSON.stringify(verifyres));
+    
     }catch (e) {
         console.log(e);
         console.log("Leave a line\n")
-        return res.status(error?.status|| 400).send(error?message : 'Something went wrong!!');
+        return res.status(e?.status|| 400).send(e? JSON.stringify({"error":e}) : JSON.stringify({"error": 'Something went wrong!!'}));
 
     }
 };
