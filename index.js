@@ -18,7 +18,7 @@ app.use(cors());
 //     res.setHeader('Access-Control-Allow-Origin', '*');
 // })
 app.get('/',(req,res)=>{
-    res.send("Twilio-sms-service activated");
+    res.send("Twilio-sms-service activated again");
 });
 // app.get('/',()=>{
 //     console.log("Twilio-sms-service activated");
