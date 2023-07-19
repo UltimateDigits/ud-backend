@@ -61,4 +61,31 @@ const verifyOTP = async (req,res,next) => {
 
     }
 };
-module.exports = {sendOTP, verifyOTP}
+
+
+/**
+ * send MSG
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+const sendMsg = async (req,res,next) => {
+    const {phoneNumber, amount} = req.body;
+    try {
+
+        const sent = await client.messages
+        .create({
+            body:`${phoneNumber} sent ${amount} into your account`,
+            to: `${phoneNumber}`
+        })
+        
+       return res.status(200).send(JSON.stringify(sent));
+    
+    }catch (e) {
+        console.log(e);
+        console.log("Leave a line\n")
+        return res.status(e?.status|| 400).send(e? JSON.stringify({"error":e}) : JSON.stringify({"error": 'Something went wrong!!'}));
+
+    }
+};
+module.exports = {sendOTP, verifyOTP, sendMsg}
