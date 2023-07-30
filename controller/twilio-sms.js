@@ -70,12 +70,12 @@ const verifyOTP = async (req,res,next) => {
  * @param {*} next
  */
 const sendMsg = async (req,res,next) => {
-    const {phoneNumber, amount} = req.body;
+    const {phoneNumber, amount, number} = req.body;
     try {
 
         const sent = await client.messages
         .create({
-            body:`${phoneNumber} sent ${amount} into your account`,
+            body:`${number} sent ${amount} into your account`,
             to: `${phoneNumber}`,
             from:"+15416157939"
         })
