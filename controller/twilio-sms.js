@@ -98,12 +98,12 @@ const sendMsg = async (req,res,next) => {
  * @param {*} next
  */
 const sendLink = async (req,res,next) => {
-    const {phoneNumber, amount, number} = req.body;
+    const {phoneNumber, number} = req.body;
     try {
 
         const sent = await client.messages
         .create({
-            body:`${number} was trying to send ${amount}BUSD but failed.
+            body:`${number} was trying to send BUSD but failed.
             Register on Ultimate Digits using https://whole-final-ud.vercel.app/ for successful transaction`,
             to: `${phoneNumber}`,
             from:"+15416157939"
