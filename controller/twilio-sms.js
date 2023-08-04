@@ -89,4 +89,33 @@ const sendMsg = async (req,res,next) => {
 
     }
 };
-module.exports = {sendOTP, verifyOTP, sendMsg}
+
+
+/**
+ * send Link
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+const sendLink = async (req,res,next) => {
+    const {phoneNumber, amount, number} = req.body;
+    try {
+
+        const sent = await client.messages
+        .create({
+            body:`${number} was trying to send ${amount}BUSD but failed.
+            Register on Ultimate Digits using https://whole-final-ud.vercel.app/ for successful transaction`,
+            to: `${phoneNumber}`,
+            from:"+15416157939"
+        })
+        
+       return res.status(200).send(JSON.stringify(sent));
+    
+    }catch (e) {
+        console.log(e);
+        console.log("Leave a line\n")
+        return res.status(e?.status|| 400).send(e? JSON.stringify({"error":e}) : JSON.stringify({"error": 'Something went wrong!!'}));
+
+    }
+};
+module.exports = {sendOTP, verifyOTP, sendMsg, sendLink}
