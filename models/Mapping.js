@@ -5,6 +5,7 @@ const userMappingSchema = new mongoose.Schema({
   endUserId: String,
   phone: String,
   address: String,
+  type: String,
 });
 
 const UserMapping = mongoose.model("UserMapping", userMappingSchema);

@@ -50,7 +50,7 @@ const sendOTP = async (req, res, next) => {
  * @param {*} next
  */
 const verifyOTP = async (req, res, next) => {
-  const { countryCode, phoneNumber, otp, rootId, address } = req.body;
+  const { countryCode, phoneNumber, otp, rootId = "ncw", address } = req.body;
   try {
     const verifyres = await client.verify.v2
       .services(TWILIO_SERVICE_SID)
@@ -59,7 +59,7 @@ const verifyOTP = async (req, res, next) => {
         code: otp,
       });
 
-    if (verifyres.status === "approved") {
+    if (verifyres.status === "approved" && rootId !== "ncw") {
       const existingMapping = await UserMapping.findOne({ rootId });
       if (existingMapping) {
         console.log("Mapping already exists");
@@ -67,11 +67,49 @@ const verifyOTP = async (req, res, next) => {
           .status(409)
           .json({ success: false, message: "Mapping already exists." });
       }
+
+      const existingNo = await UserMapping.findOne({ phone: phoneNumber });
+      if (existingNo) {
+        console.log("Number already exists");
+        return res
+          .status(408)
+          .json({ success: false, message: "Number already exists." });
+      }
+
       const newMapping = await UserMapping.create({
         rootId: rootId,
         endUserId: "asdsadasd",
         phone: phoneNumber,
         address: address,
+        type: "real",
+      });
+
+      console.log("newMapping", newMapping);
+      // return res.status(200).send(JSON.stringify(newMapping));
+    }
+    if (verifyres.status === "approved" && rootId === "ncw") {
+      const existingMapping = await UserMapping.findOne({ address });
+      if (existingMapping) {
+        console.log("Mapping already exists");
+        return res
+          .status(409)
+          .json({ success: false, message: "Mapping already exists." });
+      }
+
+      const existingNo = await UserMapping.findOne({ phone: phoneNumber });
+      if (existingNo) {
+        console.log("Number already exists");
+        return res
+          .status(408)
+          .json({ success: false, message: "Number already exists." });
+      }
+
+      const newMapping = await UserMapping.create({
+        rootId: "ncw",
+        endUserId: "asdsadasd",
+        phone: phoneNumber,
+        address: address,
+        type: "real",
       });
 
       console.log("newMapping", newMapping);

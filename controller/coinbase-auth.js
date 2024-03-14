@@ -38,6 +38,42 @@ const mapPhoneNumber = async (req, res, next) => {
   }
 };
 
+const getAddressFromPhno = async (req, res, next) => {
+  const { phoneNumber } = req.body;
+  try {
+    const existingMapping = await UserMapping.findOne({ phoneNumber });
+    if (existingMapping) {
+      return res.status(200).json({ success: true, mapping: existingMapping });
+    } else {
+      return res
+        .status(204)
+        .json({ success: false, message: "No mapping found." });
+    }
+  } catch (error) {
+    console.error("Error mapping phone number:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+const getPhnoFromAddress = async (req, res, next) => {
+  const { address } = req.body;
+  console.log(address);
+  try {
+    const existingMapping = await UserMapping.findOne({ address });
+    console.log(existingMapping);
+    if (existingMapping) {
+      return res.status(200).json({ success: true, mapping: existingMapping });
+    } else if (existingMapping == null) {
+      console.log("no mapping");
+      return res
+        .status(204)
+        .json({ success: false, message: "No mapping found." });
+    }
+  } catch (error) {
+    console.error("Error mapping phone number:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 /**
  * Verifies if the specified rootId and endUserId have a phone number mapped.
  * If so, returns a JWT and the phone number; otherwise, returns false.
@@ -91,4 +127,10 @@ const UserCoinbaseAuthToken = async (req, res, next) => {
   }
 };
 
-module.exports = { verifyUser, mapPhoneNumber, UserCoinbaseAuthToken };
+module.exports = {
+  verifyUser,
+  mapPhoneNumber,
+  UserCoinbaseAuthToken,
+  getAddressFromPhno,
+  getPhnoFromAddress,
+};
