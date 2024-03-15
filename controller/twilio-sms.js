@@ -20,6 +20,14 @@ const sendOTP = async (req, res, next) => {
   console.log(phoneNumber);
   console.log(countryCode);
   try {
+    const existingNo = await UserMapping.findOne({ phone: phoneNumber });
+    console.log(existingNo);
+    if (existingNo) {
+      console.log("Number already exists");
+      return res
+        .status(408)
+        .json({ success: false, message: "Number already exists." });
+    }
     const otpres = await client.verify.v2
       .services(TWILIO_SERVICE_SID)
       .verifications.create({
@@ -110,6 +118,7 @@ const verifyOTP = async (req, res, next) => {
         phone: phoneNumber,
         address: address,
         type: "real",
+        countryCode: countryCode.toString(),
       });
 
       console.log("newMapping", newMapping);
