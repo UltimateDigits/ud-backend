@@ -7,6 +7,7 @@ const userMappingSchema = new mongoose.Schema({
   address: String,
   type: String,
   countryCode: String,
+  virtuals: [String],
 });
 
 const UserMapping = mongoose.model("UserMapping", userMappingSchema);

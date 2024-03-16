@@ -15,22 +15,49 @@ const SECRET_KEY = "MyS3cr3tK3y!2024@#$";
  * @param {Function} next - The next middleware function.
  */
 const mapPhoneNumber = async (req, res, next) => {
-  const { rootId, endUserId, phoneNumber } = req.body;
+  const {
+    rootId = "",
+    endUserId = "",
+    phoneNumber,
+    address,
+    type,
+    countryCode,
+  } = req.body;
+
+  console.log(req.body);
   try {
     // Check if the mapping already exists
-    const existingMapping = await UserMapping.findOne({ rootId, endUserId });
+    const existingMapping = await UserMapping.findOne({ address });
+    console.log(existingMapping);
     if (existingMapping) {
-      return res
-        .status(409)
-        .json({ success: false, message: "Mapping already exists." });
+      // Check if phoneNumber is already in virtuals to avoid duplication
+      if (!existingMapping.virtuals.includes(phoneNumber)) {
+        existingMapping.virtuals.push(phoneNumber); // Add phoneNumber to virtuals
+        await existingMapping.save(); // Save the updated document
+        return res.status(200).json({
+          success: true,
+          message: "Phone number added to virtuals.",
+          mapping: existingMapping,
+        });
+      } else {
+        return res.status(409).json({
+          success: false,
+          message: "Phone number already exists in virtuals.",
+        });
+      }
     }
 
-    // If no existing mapping, create a new one
+    // If no existing mapping, create a new one with phoneNumber as the first item in virtuals
     const newMapping = await UserMapping.create({
       rootId,
       endUserId,
       phoneNumber,
+      address,
+      type,
+      countryCode,
+      virtuals: [phoneNumber], // Initialize virtuals with phoneNumber
     });
+
     return res.status(201).json({ success: true, mapping: newMapping });
   } catch (error) {
     console.error("Error mapping phone number:", error);
