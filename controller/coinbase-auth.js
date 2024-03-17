@@ -67,8 +67,10 @@ const mapPhoneNumber = async (req, res, next) => {
 
 const getAddressFromPhno = async (req, res, next) => {
   const { phoneNumber } = req.body;
+  console.log(phoneNumber);
   try {
-    const existingMapping = await UserMapping.findOne({ phoneNumber });
+    const existingMapping = await UserMapping.findOne({ phone: phoneNumber });
+    console.log(existingMapping);
     if (existingMapping) {
       return res.status(200).json({ success: true, mapping: existingMapping });
     } else {
