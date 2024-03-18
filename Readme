@@ -1,0 +1,7 @@
+npx run hardhat scripts/deploy.js -network smart_chain_testnet
+
+16.1
+// "address":"0x146A56E5855Ae5CFa57903AC66481Ba4363d3954",
+    // "address_nft" : "0x209AD4968a34198Ea2E3C6F91474CdCB417e490b",
+
+//update
