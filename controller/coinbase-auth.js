@@ -140,14 +140,18 @@ const UserCoinbaseAuthToken = async (req, res, next) => {
 
   const { uuid } = req.body;
 
+  const privateKeyString = PRIVATEKEY.replace(/\n/g, "");
+
   try {
     console.log("uuid", uuid);
     console.log(APIKEYNAME, PRIVATEKEY, uuid);
-    const token = await issueUserToken({
-      APIKEYNAME,
-      PRIVATEKEY,
-      uuid,
-    });
+    const token = await issueUserToken(
+      {
+        apiKeyName: APIKEYNAME,
+        privateKey: PRIVATEKEY,
+      },
+      { userID: uuid }
+    );
 
     res.json({ success: true, token });
   } catch (error) {
