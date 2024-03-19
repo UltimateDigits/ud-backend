@@ -37,6 +37,7 @@ const userLog = async (req, res, next) => {
     }
   } catch (e) {
     console.log(e);
+    console.log("error");
     return res.status(500).json({ success: false, error: e.message });
   }
 };
