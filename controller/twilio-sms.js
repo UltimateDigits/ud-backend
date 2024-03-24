@@ -71,6 +71,25 @@ const verifyOTP = async (req, res, next) => {
       const existingMapping = await UserMapping.findOne({ rootId });
       if (existingMapping) {
         console.log("Mapping already exists");
+
+        if (!existingMapping.phone) {
+          // Update the existing mapping with new phone and countryCode
+          await UserMapping.updateOne(
+            { rootId },
+            {
+              $set: {
+                phone: phoneNumber,
+                countryCode: countryCode,
+              },
+            }
+          );
+
+          console.log(
+            "Updated existing mapping with new phone number and country code."
+          );
+          return res.status(200).send(JSON.stringify(verifyres));
+        }
+
         return res
           .status(409)
           .json({ success: false, message: "Mapping already exists." });
@@ -90,6 +109,7 @@ const verifyOTP = async (req, res, next) => {
         phone: phoneNumber,
         address: address,
         type: "real",
+        countryCode: countryCode.toString(),
       });
 
       console.log("newMapping", newMapping);
@@ -99,6 +119,25 @@ const verifyOTP = async (req, res, next) => {
       const existingMapping = await UserMapping.findOne({ address });
       if (existingMapping) {
         console.log("Mapping already exists");
+
+        if (!existingMapping.phone) {
+          // Update the existing mapping with new phone and countryCode
+          await UserMapping.updateOne(
+            { rootId },
+            {
+              $set: {
+                phone: newPhone,
+                countryCode: newCountryCode,
+              },
+            }
+          );
+
+          console.log(
+            "Updated existing mapping with new phone number and country code."
+          );
+          return res.status(200).send(JSON.stringify(verifyres));
+        }
+
         return res
           .status(409)
           .json({ success: false, message: "Mapping already exists." });
