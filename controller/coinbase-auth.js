@@ -1,7 +1,16 @@
 const jwt = require("jsonwebtoken");
 const UserMapping = require("../models/Mapping");
+const fs = require("fs"); // Import the File System module
+const path = require("path");
 const { APIKEYNAME, PRIVATEKEY } = process.env;
+const filePath = path.join(__dirname, "coinbase_cloud_api_key.json");
 
+// Use fs.readFileSync to read the file content synchronously
+const fileContent = fs.readFileSync(filePath, "utf8");
+const coinbaseCloudApiKey = JSON.parse(fileContent);
+
+const apiKeyName = coinbaseCloudApiKey.name;
+const privateKey = coinbaseCloudApiKey.privateKey;
 // Import the UserMapping model
 const SECRET_KEY = "MyS3cr3tK3y!2024@#$";
 // const UserCoinbaseAuth = require("@coinbase/waas-server-auth");
@@ -136,23 +145,31 @@ const verifyUser = async (req, res, next) => {
   }
 };
 const UserCoinbaseAuthToken = async (req, res, next) => {
-  const { issueUserToken } = await import("@coinbase/waas-server-auth");
-
-  const { uuid } = req.body;
-
   try {
-    console.log("uuid", uuid);
-    console.log(APIKEYNAME, PRIVATEKEY, uuid);
-    const token = await issueUserToken({
-      APIKEYNAME,
-      PRIVATEKEY,
-      uuid,
-    });
+    const { issueUserToken } = await import("@coinbase/waas-server-auth");
 
-    res.json({ success: true, token });
-  } catch (error) {
-    console.error("Error verifying user:", error);
-    return res.status(500).json({ success: false, error: error.message });
+    try {
+      const { uuid } = req.body;
+      console.log("uuid", uuid);
+      console.log(apiKeyName, apiKeyName);
+      if (apiKeyName != null && apiKeyName != null) {
+        const token = await issueUserToken({
+          apiKeyName: apiKeyName,
+          privateKey: privateKey,
+          userID: uuid,
+        });
+
+        console.log("auth done", token);
+        res.json({ success: true, token });
+      }
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  } catch (e) {
+    console.log(e);
+    console.log("error");
+    return res.status(500).json({ success: false, error: e.message });
   }
 };
 
