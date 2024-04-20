@@ -27,13 +27,15 @@ console.log("num",number)
 
 const SetMinted = async (req, res, next) => {
     const { number } = req.body;
+
+    console.log(number)
     try {
 
         const numberRecorddb = await Numbers.findOne({ number: number });
 
         if(numberRecorddb){
             res.status(201).json({ message: "Number has been set as minted." });
-
+return;
         }
 
         // Create a new number record in the database
