@@ -37,6 +37,7 @@ const mapPhoneNumber = async (req, res, next) => {
   try {
     // Check if the mapping already exists
     const existingMapping = await UserMapping.findOne({ address });
+    console.log("existingMapping")
     console.log(existingMapping);
     if (existingMapping) {
       // Check if phoneNumber is already in virtuals to avoid duplication
@@ -60,7 +61,7 @@ const mapPhoneNumber = async (req, res, next) => {
     const newMapping = await UserMapping.create({
       rootId,
       endUserId,
-      phoneNumber,
+    
       address,
       type,
       countryCode,
