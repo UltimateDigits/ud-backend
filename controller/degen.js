@@ -38,10 +38,12 @@ const SetMinted = async (req, res, next) => {
 return;
         }
 
-        // Create a new number record in the database
-        const numberRecord = new Numbers({ number: number, minted: true });
-        await numberRecord.save();
-        res.status(200).json({ message: "Number has been set as minted." });
+else{
+          // Create a new number record in the database
+          const numberRecord = new Numbers({ number: number, minted: true });
+          await numberRecord.save();
+          res.status(200).json({ message: "Number has been set as minted." });
+}
     } catch (error) {
         console.error("Database query failed:", error);
         res.status(500).json({ message: "Internal server error." });
