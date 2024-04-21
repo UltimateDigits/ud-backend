@@ -63,6 +63,8 @@ const SetMintedBulk = async (req, res, next) => {
                 // Create a new number record in the database
                 const numberRecord = new Numbers({ number: number, minted: true });
                 await numberRecord.save();
+                res.status(201).json({ message: "Number has been set as minted." });
+
             }
         }
         res.status(200).json({ message: "All numbers have been set as minted." });
