@@ -49,6 +49,28 @@ else{
         res.status(500).json({ message: "Internal server error." });
     }
 };
+const SetMintedBulk = async (req, res, next) => {
+    const { numbers } = req.body;
+
+    console.log(numbers)
+    try {
+        for(let number of numbers) {
+            const numberRecorddb = await Numbers.findOne({ number: number });
+
+            if(numberRecorddb){
+                res.status(201).json({ message: "Number has been set as minted." });
+            } else {
+                // Create a new number record in the database
+                const numberRecord = new Numbers({ number: number, minted: true });
+                await numberRecord.save();
+            }
+        }
+        res.status(200).json({ message: "All numbers have been set as minted." });
+    } catch (error) {
+        console.error("Database query failed:", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
 
 const generateSimilarNumbers = async (originalNumber) => {
     let similarNumbers = [];
@@ -109,4 +131,4 @@ const generateSimilarNumbers = async (originalNumber) => {
       }
 };
 
-module.exports = {CheckNumber, GenerateNumbers,SetMinted}
+module.exports = {CheckNumber, GenerateNumbers,SetMinted,SetMintedBulk}
