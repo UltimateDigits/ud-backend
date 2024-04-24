@@ -67,7 +67,6 @@ const SetMintedBulk = async (req, res, next) => {
 
             }
         }
-        res.status(200).json({ message: "All numbers have been set as minted." });
     } catch (error) {
         console.error("Database query failed:", error);
         res.status(500).json({ message: "Internal server error." });
