@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const twilioRouter = require("./routes/twilio-sms");
 const coinbaseRouter = require("./routes/coinbase");
 const degenRouter = require("./routes/Degen");
+const unicornRouter = require("./routes/Unicorn")
 const app = express();
 
 const { PORT } = process.env;
@@ -17,6 +18,7 @@ app.use(jsonParser);
 app.use("/twilio-sms", twilioRouter);
 app.use("/coinbase", coinbaseRouter);
 app.use("/degen",degenRouter);
+app.use("/unicorn",unicornRouter);
 
 app.use(cors("*"));
 // app.use((req,res,next)=>{
