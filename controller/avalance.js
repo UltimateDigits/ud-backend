@@ -57,16 +57,17 @@ const SetMintedBulk = async (req, res, next) => {
         for(let number of numbers) {
             const numberRecorddb = await Numbers.findOne({ number: number });
 
-            if(numberRecorddb){
-                res.status(201).json({ message: "Number has been set as minted." });
-            } else {
+          if(!numberRecorddb){
                 // Create a new number record in the database
                 const numberRecord = new Numbers({ number: number, minted: true });
                 await numberRecord.save();
-                res.status(201).json({ message: "Number has been set as minted." });
+                // res.status(201).json({ message: "Number has been set as minted." });
 
             }
         }
+
+        res.status(201).json({ message: "Numbers have been set as minted." });
+
     } catch (error) {
         console.error("Database query failed:", error);
         res.status(500).json({ message: "Internal server error." });
