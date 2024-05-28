@@ -6,12 +6,14 @@ const {
   UserCoinbaseAuthToken,
   getAddressFromPhno,
   getPhnoFromAddress,
+  checkNumbers,
 } = require("../controller/coinbase-auth");
 
 const router = express.Router();
 
 router.use(cors("*"));
 
+router.route("/checknum").post(checkNumbers);
 router.route("/verify").post(verifyUser);
 router.route("/map-phno").post(mapPhoneNumber);
 router.route("/coinbaseAuth").post(UserCoinbaseAuthToken);

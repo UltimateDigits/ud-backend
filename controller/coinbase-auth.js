@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const UserMapping = require("../models/Mapping");
 const fs = require("fs"); // Import the File System module
 const path = require("path");
+const { log } = require("console");
 const { APIKEYNAME, PRIVATEKEY } = process.env;
 const filePath = path.join(__dirname, "coinbase_cloud_api_key.json");
 
@@ -13,7 +14,6 @@ const apiKeyName = coinbaseCloudApiKey.name;
 const privateKey = coinbaseCloudApiKey.privateKey;
 // Import the UserMapping model
 const SECRET_KEY = "MyS3cr3tK3y!2024@#$";
-// const UserCoinbaseAuth = require("@coinbase/waas-server-auth");
 
 /**
  * Maps a new phone number to the specified rootId and endUserId.
@@ -173,10 +173,45 @@ const UserCoinbaseAuthToken = async (req, res, next) => {
   }
 };
 
+// New function to check if numbers exist in the DB and return email and address
+const checkNumbers = async (req, res, next) => {
+  console.log("called hadasdas");
+  const { numbers } = req.body;
+
+  console.log(numbers);
+
+  try {
+    const results = await Promise.all(
+      numbers.map(async (number) => {
+        const userMapping = await UserMapping.findOne({ phone: number });
+        if (userMapping) {
+          return {
+            phone: number,
+            email: userMapping.endUserId, // Assuming endUserId is the email
+            address: userMapping.address,
+          };
+        } else {
+          return {
+            phone: number,
+            email: null,
+            address: null,
+          };
+        }
+      })
+    );
+
+    return res.status(200).json({ success: true, results });
+  } catch (error) {
+    console.error("Error checking numbers:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 module.exports = {
   verifyUser,
   mapPhoneNumber,
   UserCoinbaseAuthToken,
   getAddressFromPhno,
   getPhnoFromAddress,
+  checkNumbers,
 };
