@@ -206,6 +206,48 @@ const checkNumbers = async (req, res, next) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 };
+const checkNumbersgen = async (req, res, next) => {
+  console.log("called hadasdas");
+  const { numbers } = req.body;
+
+  console.log(numbers);
+
+  try {
+    const results = await Promise.all(
+      numbers.map(async (number) => {
+        const exists = await UserMapping.exists({ phone: number });
+        return { number, exists };
+      })
+    );
+    return res.status(200).json({ success: true, results });
+  } catch (error) {
+    console.error("Error checking numbers:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+const isNumberAvailable = async (req, res, next) => {
+  console.log("Check if number is available");
+  const { number } = req.body;
+
+  console.log(number);
+
+  try {
+    const userMapping = await UserMapping.findOne({
+      phone: number,
+      countryCode: 999,
+    });
+    console.log(userMapping);
+    if (userMapping) {
+      return res.status(200).json({ success: true, available: true });
+    } else {
+      return res.status(204).json({ success: true, available: false });
+    }
+  } catch (error) {
+    console.error("Error checking number:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
 
 module.exports = {
   verifyUser,
@@ -214,4 +256,6 @@ module.exports = {
   getAddressFromPhno,
   getPhnoFromAddress,
   checkNumbers,
+  isNumberAvailable,
+  checkNumbersgen,
 };
