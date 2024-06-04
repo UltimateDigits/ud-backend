@@ -7,6 +7,8 @@ const { APIKEYNAME, PRIVATEKEY } = process.env;
 const filePath = path.join(__dirname, "coinbase_cloud_api_key.json");
 const rateLimit = require("express-rate-limit");
 const { query, validationResult } = require("express-validator");
+const Moralis = require("moralis").default;
+
 // Use fs.readFileSync to read the file content synchronously
 const fileContent = fs.readFileSync(filePath, "utf8");
 const coinbaseCloudApiKey = JSON.parse(fileContent);

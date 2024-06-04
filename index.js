@@ -7,10 +7,12 @@ const mongoose = require("mongoose");
 const twilioRouter = require("./routes/twilio-sms");
 const coinbaseRouter = require("./routes/coinbase");
 const app = express();
+const Moralis = require("moralis").default;
 
 const { PORT } = process.env;
 const port = 8080 || PORT;
 const jsonParser = bodyParser.json();
+const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
 
 app.use(jsonParser);
 app.use("/twilio-sms", twilioRouter);
@@ -41,7 +43,15 @@ app.post("/", (req, res) => {
   res.send("POST request received");
 });
 
-app.listen(port, () => {
-  console.log(`server started listen to the port ${port}`);
+Moralis.start({
+  apiKey: MORALIS_API_KEY,
+}).then(() => {
+  app.listen(port, () => {
+    console.log(`it's alive on http://localhost:${port}`);
+  });
 });
+
+// app.listen(port, () => {
+//   console.log(`server started listen to the port ${port}`);
+// });
 module.exports = app;
