@@ -5,7 +5,8 @@ const path = require("path");
 const { log } = require("console");
 const { APIKEYNAME, PRIVATEKEY } = process.env;
 const filePath = path.join(__dirname, "coinbase_cloud_api_key.json");
-
+const rateLimit = require("express-rate-limit");
+const { query, validationResult } = require("express-validator");
 // Use fs.readFileSync to read the file content synchronously
 const fileContent = fs.readFileSync(filePath, "utf8");
 const coinbaseCloudApiKey = JSON.parse(fileContent);
@@ -249,6 +250,35 @@ const isNumberAvailable = async (req, res, next) => {
   }
 };
 
+const moralis = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { address, chain } = req.body;
+
+  try {
+    console.log(address);
+    console.log(chain);
+    if (!address || !chain) {
+      return res
+        .status(400)
+        .json({ error: "Missing address or chain parameter" });
+    }
+    const response = await Moralis.EvmApi.nft.getWalletNFTs({
+      address: address,
+      chain: chain,
+      mediaItems: false,
+      format: "decimal",
+    });
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(`Error: ${e}`);
+    return res.status(400).json();
+  }
+};
+
 module.exports = {
   verifyUser,
   mapPhoneNumber,
@@ -258,4 +288,5 @@ module.exports = {
   checkNumbers,
   isNumberAvailable,
   checkNumbersgen,
+  moralis,
 };
