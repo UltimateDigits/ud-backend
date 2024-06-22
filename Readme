@@ -5,3 +5,8 @@ npx run hardhat scripts/deploy.js -network smart_chain_testnet
     // "address_nft" : "0x209AD4968a34198Ea2E3C6F91474CdCB417e490b",
 
 //update
+
+
+
+// https://ud-backend.vercel.app
+// http://localhost:8080

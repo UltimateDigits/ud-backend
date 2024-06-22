@@ -10,6 +10,7 @@ const {
   isNumberAvailable,
   checkNumbersgen,
   moralis,
+  getAddressFromVirtual,
 } = require("../controller/coinbase-auth");
 
 const router = express.Router();
@@ -25,5 +26,6 @@ router.route("/getPhno").post(getPhnoFromAddress);
 router.route("/getvirtuals").post(isNumberAvailable);
 router.route("/checknumbersgen").post(checkNumbersgen);
 router.route("/moralis").post(moralis);
+router.route("/getvirt").post(getAddressFromVirtual);
 
 module.exports = router;

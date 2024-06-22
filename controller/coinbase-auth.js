@@ -281,6 +281,25 @@ const moralis = async (req, res) => {
   }
 };
 
+const getAddressFromVirtual = async (req, res, next) => {
+  const { virtual } = req.body; // changed from phoneNumber to virtual
+  console.log(virtual);
+  try {
+    const existingMapping = await UserMapping.findOne({ virtuals: virtual }); // search for virtual in virtuals array
+    console.log(existingMapping);
+    if (existingMapping) {
+      return res.status(200).json({ success: true, mapping: existingMapping });
+    } else {
+      return res
+        .status(204)
+        .json({ success: false, message: "No mapping found." });
+    }
+  } catch (error) {
+    console.error("Error mapping virtual:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 module.exports = {
   verifyUser,
   mapPhoneNumber,
@@ -291,4 +310,5 @@ module.exports = {
   isNumberAvailable,
   checkNumbersgen,
   moralis,
+  getAddressFromVirtual,
 };
