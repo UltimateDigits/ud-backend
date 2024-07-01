@@ -299,6 +299,76 @@ const getAddressFromVirtual = async (req, res, next) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 };
+const getAccessToken = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { walletAddress, roomid } = req.body;
+  console.log(roomid);
+  console.log(walletAddress);
+
+  try {
+    const accessToken = new AccessToken({
+      apiKey: HUDDLE_API_KEY,
+      roomId: roomid,
+      //available roles: Role.HOST, Role.CO_HOST, Role.SPEAKER, Role.LISTENER, Role.GUEST - depending on the privileges you want to give to the user
+      role: Role.HOST,
+      //custom permissions give you more flexibility in terms of the user privileges than a pre-defined role
+      permissions: {
+        admin: true,
+        canConsume: true,
+        canProduce: true,
+        canProduceSources: {
+          cam: true,
+          mic: true,
+          screen: true,
+        },
+        canRecvData: true,
+        canSendData: true,
+        canUpdateMetadata: true,
+      },
+      options: {
+        metadata: {
+          // you can add any custom attributes here which you want to associate with the user
+          walletAddress: walletAddress,
+        },
+      },
+    });
+
+    const token = await accessToken.toJwt();
+
+    console.log(token);
+
+    return res.status(200).json({ AccessToken: token });
+  } catch (e) {
+    console.log(`Error: ${e}`);
+    return res.status(400).json();
+  }
+};
+
+// app.get('/getAccessToken',
+// );
+
+const getRoomId = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const { walletAddress } = req.body;
+
+  const createNewTokenGatedRoom = await api.createRoom({
+    title: "Huddle01 Room",
+    chain: "ETHEREUM",
+    tokenType: "ERC721",
+    contractAddress: [walletAddress],
+  });
+
+  const roomId = createNewTokenGatedRoom?.data;
+
+  return res.status(200).json(roomId);
+};
 
 module.exports = {
   verifyUser,
@@ -311,4 +381,6 @@ module.exports = {
   checkNumbersgen,
   moralis,
   getAddressFromVirtual,
+  getAccessToken,
+  getRoomId,
 };
