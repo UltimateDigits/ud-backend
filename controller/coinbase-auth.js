@@ -8,6 +8,10 @@ const filePath = path.join(__dirname, "coinbase_cloud_api_key.json");
 const rateLimit = require("express-rate-limit");
 const { query, validationResult } = require("express-validator");
 const Moralis = require("moralis").default;
+const { API } = require("@huddle01/server-sdk/api");
+const HuddleAuth = require("@huddle01/server-sdk/auth");
+const { AccessToken, Role } = HuddleAuth;
+const HUDDLE_API_KEY = process.env.HUDDLE_API_KEY;
 
 // Use fs.readFileSync to read the file content synchronously
 const fileContent = fs.readFileSync(filePath, "utf8");
@@ -348,16 +352,15 @@ const getAccessToken = async (req, res) => {
   }
 };
 
-// app.get('/getAccessToken',
-// );
-
 const getRoomId = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
   const { walletAddress } = req.body;
-
+  const api = new API({
+    apiKey: HUDDLE_API_KEY,
+  });
   const createNewTokenGatedRoom = await api.createRoom({
     title: "Huddle01 Room",
     chain: "ETHEREUM",
