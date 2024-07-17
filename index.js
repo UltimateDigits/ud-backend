@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const twilioRouter = require("./routes/twilio-sms");
 const coinbaseRouter = require("./routes/coinbase");
+const winkRouter = require("./routes/winks");
 const app = express();
 const Moralis = require("moralis").default;
 
@@ -17,6 +18,7 @@ const MORALIS_API_KEY = process.env.MORALIS_API_KEY;
 app.use(jsonParser);
 app.use("/twilio-sms", twilioRouter);
 app.use("/coinbase", coinbaseRouter);
+app.use("/winks", winkRouter);
 app.use(cors("*"));
 // app.use((req,res,next)=>{
 //     res.setHeader('Access-Control-Allow-Origin', '*');
