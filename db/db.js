@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const dbURI = "mongodb+srv://udmain:Qm6CJDapfQ4ehxEF@ud-main.xnsjd.mongodb.net/UD"
+const dbURI =  process.env.DB
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected successfully"))

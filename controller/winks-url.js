@@ -55,7 +55,7 @@ const createWink = async (req, res, next) => {
 
   await newLink.save();
 
-  res.status(200).json({ link: `http://localhost:3000/?search=${uniqueId}` });
+  res.status(200).json({ link: `https://winks.ultimatedigits.com/?search=${uniqueId}` });
 };
 const getWink = async (req, res, next) => {
 
