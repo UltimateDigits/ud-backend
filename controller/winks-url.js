@@ -34,13 +34,13 @@ const createWink = async (req, res, next) => {
   // Generate a unique ID and check if it already exists in the database
   while (!isUnique) {
     uniqueId = uuidv4();
-    const existingLink = await Link.findOne({ uniqueId });
+    const existingLink = await Winks.findOne({ uniqueId });
     if (!existingLink) {
       isUnique = true;
     }
   }
 
-  const newLink = new Link({
+  const newLink = new Winks({
     walletAddress,
     amount,
     chainDetails,
@@ -57,7 +57,26 @@ const createWink = async (req, res, next) => {
 
   res.status(200).json({ link: `http://localhost:3000/?search=${uniqueId}` });
 };
+const getWink = async (req, res, next) => {
+
+  console.log("caleed get");
+  const { uniqueId } = req.params;
+  console.log("uni", uniqueId);
+  const link = await Winks.findOne({ uniqueId });
+
+  console.log("ilin",link);
+
+  if (link) {
+    res.status(200).json(link);
+  } else {
+    res.status(404).json({ message: 'Link not found' });
+  }
+};
+
+
+
 
 module.exports = {
   createWink,
+  getWink
 };

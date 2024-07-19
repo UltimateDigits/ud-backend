@@ -26,7 +26,11 @@ app.use(cors("*"));
 app.get("/", (req, res) => {
   res.send("Twilio-sms-service activated again");
 });
-const dbURI = "mongodb+srv://Thiru:Gryffindor7@cluster0.96vb1.mongodb.net/UD";
+// const dbURI = "mongodb+srv://Thiru:Gryffindor7@cluster0.96vb1.mongodb.net/UD";
+
+const dbURI = "mongodb+srv://udmain:Qm6CJDapfQ4ehxEF@ud-main.xnsjd.mongodb.net/UD";
+
+console.log("log in db nuri", dbURI);
 
 mongoose
   .connect(dbURI, {
@@ -34,7 +38,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("Error connecting to MongoDB:", err.message));
+  .catch((err) => console.error("Error connecting to MongoDB: in index", err.message));
 
 // app.get('/',()=>{
 //     console.log("Twilio-sms-service activated");
