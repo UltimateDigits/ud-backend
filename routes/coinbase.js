@@ -13,6 +13,7 @@ const {
   getAddressFromVirtual,
   getAccessToken,
   getRoomId,
+  checkNumbersExist
 } = require("../controller/coinbase-auth");
 
 const router = express.Router();
@@ -20,6 +21,7 @@ const router = express.Router();
 router.use(cors("*"));
 
 router.route("/checknum").post(checkNumbers);
+router.route("/checknumexists").post(checkNumbersExist);
 router.route("/verify").post(verifyUser);
 router.route("/map-phno").post(mapPhoneNumber);
 router.route("/coinbaseAuth").post(UserCoinbaseAuthToken);

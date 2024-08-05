@@ -213,6 +213,36 @@ const checkNumbers = async (req, res, next) => {
     return res.status(500).json({ success: false, error: error.message });
   }
 };
+const checkNumbersExist = async (req, res, next) => {
+  console.log("called hadasdas");
+  const { numbers } = req.body;
+
+  console.log(numbers);
+
+  try {
+    const results = await Promise.all(
+      numbers.map(async (number) => {
+        const userMapping = await UserMapping.findOne({ phone: number });
+        if (userMapping) {
+          return {
+            phone: number,
+          exits: true
+          };
+        } else {
+          return {
+            phone: number,
+          exists: false
+          };
+        }
+      })
+    );
+
+    return res.status(200).json({ success: true, results });
+  } catch (error) {
+    console.error("Error checking numbers:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
 const checkNumbersgen = async (req, res, next) => {
   console.log("called hadasdas");
   const { numbers } = req.body;
@@ -386,4 +416,5 @@ module.exports = {
   getAddressFromVirtual,
   getAccessToken,
   getRoomId,
+  checkNumbersExist
 };
