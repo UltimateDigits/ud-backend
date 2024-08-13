@@ -403,6 +403,39 @@ const getRoomId = async (req, res) => {
   return res.status(200).json(roomId);
 };
 
+
+const doesAddressExist = async (address) => {
+  try {
+    // Search for a document that contains the given address
+    console.log("ad",address);
+    const existingMapping = await UserMapping.findOne({ address: address });
+    console.log("exe",existingMapping);
+    // If a document with the given address is found, return true
+    if (existingMapping) {
+      return true;
+    }
+    
+    // If no document is found, return false
+    return false;
+  } catch (error) {
+    console.error("Error checking address existence:", error);
+    throw new Error("Failed to check address existence.");
+  }
+};
+
+const checkAddressExists = async (req, res, next) => {
+  const { address } = req.body; // Get the address from the request body
+
+  try {
+    const exists = await doesAddressExist(address);
+    return res.status(200).json({ success: true, exists: exists });
+  } catch (error) {
+    console.error("Error checking address existence:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+
 module.exports = {
   verifyUser,
   mapPhoneNumber,
@@ -416,5 +449,6 @@ module.exports = {
   getAddressFromVirtual,
   getAccessToken,
   getRoomId,
-  checkNumbersExist
+  checkNumbersExist,
+  checkAddressExists
 };

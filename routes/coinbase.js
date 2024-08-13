@@ -13,7 +13,8 @@ const {
   getAddressFromVirtual,
   getAccessToken,
   getRoomId,
-  checkNumbersExist
+  checkNumbersExist,
+  checkAddressExists
 } = require("../controller/coinbase-auth");
 
 const router = express.Router();
@@ -33,5 +34,6 @@ router.route("/moralis").post(moralis);
 router.route("/getvirt").post(getAddressFromVirtual);
 router.route("/getAccessToken").post(getAccessToken);
 router.route("/getRoomId").post(getRoomId);
+router.route("/addressExists").post(checkAddressExists);
 
 module.exports = router;
