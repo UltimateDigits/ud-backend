@@ -425,7 +425,7 @@ const doesAddressExist = async (address) => {
 
 const checkAddressExists = async (req, res, next) => {
   const { address } = req.body; // Get the address from the request body
-
+console.log("the address sent", address);
   try {
     const exists = await doesAddressExist(address);
     return res.status(200).json({ success: true, exists: exists });
