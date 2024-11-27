@@ -17,6 +17,7 @@
   "dependencies": {
     "@coinbase/waas-server-auth": "https://api.developer.coinbase.com/waas/consumer/1994648a1fa8a282f1c3ca917a0379f1f79fbb06/waas-server-auth/waas-server-auth-3.0.5.tgz",
     "@huddle01/server-sdk": "^2.2.2",
+    "axios": "^1.7.8",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
